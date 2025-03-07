@@ -2,6 +2,7 @@ use async_graphql::{Context, Object, Result, SimpleObject};
 use mongodb::{bson::doc, Database};
 use futures::stream::TryStreamExt;
 
+
 use crate::models::models::{Post, User};
 
 #[derive(SimpleObject)]
@@ -47,8 +48,15 @@ impl CmsQuery {
             .ok_or_else(|| async_graphql::Error::new("Author not found"))?;
 
 
-               // If updated_at is None, just return None.
-            let updated_at = post.updated_at.map(|dt| dt.to_rfc3339());
+         // Use try_to_rfc3339_string() instead of the deprecated method
+            let updated_at = post.updated_at
+                .map(|dt| dt.try_to_rfc3339_string().unwrap_or_else(|_| "".to_string()));  // Handle possible error
+
+
+            // Handle `Option<DateTime>` with `map` to format `created_at`
+            let created_at = post.created_at
+                .map(|dt| dt.try_to_rfc3339_string().unwrap_or_else(|_| "".to_string()));
+
 
 
            posts.push(GQLPost {
@@ -62,7 +70,7 @@ impl CmsQuery {
                 phone_number: author.phone_number,
             },
             desc: post.desc,
-            created_at: post.created_at.to_string(),
+             created_at: created_at.unwrap_or_else(|| "".to_string()), 
             updated_at,  
         });
 

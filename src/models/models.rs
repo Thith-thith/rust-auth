@@ -1,6 +1,6 @@
-use mongodb::bson::oid::ObjectId;
+use mongodb::bson::{oid::ObjectId, DateTime};
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
+
 
 
 
@@ -46,9 +46,7 @@ pub struct Post {
     #[serde(rename = "author_id")]
     pub author: ObjectId,
     pub desc: String,
-    #[serde(with = "chrono::serde::ts_seconds")] 
-    pub created_at: DateTime<Utc>,
-    #[serde(with = "chrono::serde::ts_seconds_option")]
-    pub updated_at: Option<DateTime<Utc>>,
+    pub created_at: Option<DateTime>,
+    pub updated_at: Option<DateTime>,
 }
 
