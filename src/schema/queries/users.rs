@@ -36,10 +36,10 @@ impl From<User> for GQLUser {
 }
 
 #[derive(Default)]
-pub struct Query;
+pub struct UserQuery;
 
 #[Object]
-impl Query {
+impl UserQuery {
     async fn users(&self, ctx: &Context<'_>) -> Result<Vec<GQLUser>> {
         let db = ctx.data::<Database>()?;
         let collection = db.collection::<User>("users");

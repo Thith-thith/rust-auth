@@ -1,5 +1,8 @@
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
+use chrono::{DateTime, Utc};
+
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct User {
@@ -33,3 +36,19 @@ pub struct Claims {
     pub sub: String, // Subject (email)
     pub exp: usize,  // Expiration timestamp
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Post {
+    #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
+    pub id: Option<ObjectId>,
+    pub title: String,
+    pub thumbnail: String,
+    #[serde(rename = "author_id")]
+    pub author: ObjectId,
+    pub desc: String,
+    #[serde(with = "chrono::serde::ts_seconds")] 
+    pub created_at: DateTime<Utc>,
+    #[serde(with = "chrono::serde::ts_seconds_option")]
+    pub updated_at: Option<DateTime<Utc>>,
+}
+

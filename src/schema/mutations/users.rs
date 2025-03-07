@@ -10,10 +10,10 @@ struct MutationResponse {
 }
 
 #[derive(Default)]
-pub struct Mutation;
+pub struct UserMutation;
 
 #[Object]
-impl Mutation {
+impl UserMutation {
     async fn update_user(
         &self,
         ctx: &Context<'_>,

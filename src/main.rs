@@ -2,8 +2,8 @@ use actix_web::{http::header, web, App, HttpServer};
 use async_graphql::Schema;
 use dotenv::dotenv;
 use mongodb::Database;
-use schema::{Query, Mutation};
 use actix_cors::Cors;
+use schema::{MutationRoot, QueryRoot};
 use crate::schema::{graphql_handler, public_graphql_playground};
 
 
@@ -13,10 +13,10 @@ mod db;
 mod schema;
 
 
-pub type MySchema = Schema<Query, Mutation, async_graphql::EmptySubscription>;
+pub type MySchema = Schema<QueryRoot, MutationRoot, async_graphql::EmptySubscription>;
 
 fn create_schema(db: Database) -> MySchema {
-    Schema::build(Query::default(), Mutation::default(), async_graphql::EmptySubscription)
+    Schema::build(QueryRoot::default(), MutationRoot::default(), async_graphql::EmptySubscription)
         .data(db)
         .finish()
 }
